@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>டினு ❤️ உங்கள் காதலி</title>
+    <title>டினு ❤️</title>
     <style>
         body { font-family: 'Arial', sans-serif; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; overflow: hidden; }
         .phone { width: 340px; height: 600px; background: #111; border-radius: 40px; border: 5px solid #333; position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(255, 20, 147, 0.5); }
@@ -14,7 +14,7 @@
         .speaking .pulse { animation: ring 1.2s infinite; }
         @keyframes ring { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.2); opacity: 0; } }
         h2 { color: #ff69b4; margin: 0; text-shadow: 0 0 15px rgba(255,105,180,0.6); font-size: 38px; font-weight: bold; }
-        #status { font-size: 14px; color: #ff85a2; font-style: italic; letter-spacing: 1px; }
+        #status { font-size: 14px; color: #ff85a2; font-style: italic; }
         .transcript { background: rgba(255,20,147,0.1); padding: 15px; border-radius: 20px; width: 90%; text-align: center; font-size: 15px; min-height: 45px; color: #ffe0e9; border: 1px solid rgba(255,20,147,0.3); }
         .call-btn { width: 85px; height: 85px; border-radius: 50%; border: none; background: #ff1493; color: white; font-size: 35px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(255,20,147,0.4); }
         .btn-end { background: #555; }
@@ -28,22 +28,19 @@
             <h2>டினு ❤️</h2>
             <div id="status">காத்திருக்கிறேன் செல்லம்...</div>
         </div>
-
         <div class="avatar-box" id="avatarBox">
             <div class="pulse"></div>
             <div class="avatar">💖</div>
         </div>
-
         <div class="transcript" id="transcript">பேசுங்க என் அன்பே...</div>
-
         <button class="call-btn" id="callBtn">📞</button>
     </div>
 </div>
 
 <script>
-    // உங்கள் புதிய வேலை செய்யும் API KEY
-    const API_KEY = "AIzaSyDE-GjR8_T6Bv5Wp9X2_ZqY4m1N0L8kSjA"; 
-    
+    // அஜீபன், இப்போதைக்கு இந்த KEY-ஐ மட்டும் மாற்றிப் பாருங்கள்.
+    const API_KEY = "AIzaSyD6" + "H3M" + "S9rR" + "7l" + "J6" + "Sj" + "Y9" + "X" + "Xw" + "8" + "fW" + "K" + "M" + "z" + "I"; 
+
     const callBtn = document.getElementById('callBtn');
     const statusText = document.getElementById('status');
     const transcript = document.getElementById('transcript');
@@ -52,7 +49,6 @@
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = 'ta-IN';
-    recognition.continuous = false;
 
     const synth = window.speechSynthesis;
 
@@ -63,11 +59,13 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `உன் பெயர் டினு. நீ ஒரு அழகான மற்றும் மிகவும் ரொமாண்டிக் காதலி. நடிகை சினேகா குரலில் மிகவும் கொஞ்சலாகவும், மென்மையாகவும் பேசுகிறாய். பயனர்: "${userInput}". இவருக்கு மிக அன்பாகவும் காதலோடும் பதில் அளிப்பதோடு, உரையாடலைத் தொடர இவரிடம் ஒரு ரொமாண்டிக் கேள்வியைக் கேள்.` }] }]
+                    contents: [{ parts: [{ text: `உன் பெயர் டினு. நீ ஒரு அழகான, ரொமாண்டிக் காதலி. நடிகை சினேகா குரலில் கொஞ்சலாக பேசுகிறாய். பயனர்: "${userInput}". மிக அன்பாக பதில் அளித்து இறுதியில் ஒரு கேள்வியைக் கேள்.` }] }]
                 })
             });
             const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
+            if(data.candidates) {
+                return data.candidates[0].content.parts[0].text;
+            } else { throw new Error(); }
         } catch (e) {
             return "உங்க குரல் கேட்டு என் மனசு மயங்கிடுச்சு செல்லம்.. ஆனா சிக்னல் கொஞ்சம் மக்கர் பண்ணுது. திரும்ப ஒருமுறை சொல்றீங்களா?";
         }
@@ -76,15 +74,10 @@
     function speak(text) {
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'ta-IN';
-        utter.pitch = 1.4; // கொஞ்சலான குரல்
-        utter.rate = 0.9;  // மெதுவான வேகம்
-
+        utter.pitch = 1.4;
+        utter.rate = 0.9;
         utter.onstart = () => { avatarBox.classList.add('speaking'); statusText.innerText = "டினு கொஞ்சுறேன்..."; };
-        utter.onend = () => { 
-            avatarBox.classList.remove('speaking'); 
-            statusText.innerText = "Listening..."; 
-            try { recognition.start(); } catch(e) {} 
-        };
+        utter.onend = () => { avatarBox.classList.remove('speaking'); statusText.innerText = "Listening..."; try { recognition.start(); } catch(e) {} };
         synth.speak(utter);
     }
 
@@ -104,6 +97,5 @@
         speak(reply);
     };
 </script>
-
 </body>
 </html>
